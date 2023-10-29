@@ -1,0 +1,10 @@
+#!/bin/bash
+# a Bash script that uses ssh to connect to your server using the private key ~/.ssh/school with the user ubuntu.
+
+# server information
+server_ip="34.207.62.121"
+private_key="~/.ssh/school"
+user="ubuntu"
+
+# SSH connection using single-character flags
+ssh -i "$private_key" "$user@$server_ip"
