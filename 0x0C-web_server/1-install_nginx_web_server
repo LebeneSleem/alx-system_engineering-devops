@@ -1,0 +1,13 @@
+#!/bin/bash
+
+apt-get update
+apt-get -y upgrade
+apt-get -y install nginx
+
+echo "Hello World!" > /var/www/html/index.html
+
+if pgrep nginx > /dev/null; then
+  service nginx reload
+else
+  service nginx start
+fi
