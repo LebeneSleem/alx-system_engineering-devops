@@ -1,5 +1,8 @@
-#!/usr/bin/env bash
-# Configure your Nginx server so that /redirect_me is redirecting to another page.
+#!/bin/bash
+
+# This Bash script configures an Nginx server to return a "301 Moved Permanently"
+# status when accessing the /redirect_me location.
+
 # Update and install Nginx
 sudo apt-get update
 sudo apt-get install -y nginx
@@ -29,5 +32,5 @@ sudo ln -s /etc/nginx/sites-available/redirect_me /etc/nginx/sites-enabled/
 
 # Test the Nginx configuration for syntax errors
 if sudo nginx -t; then
-    sudo service nginx reload
+    sudo systemctl reload nginx
 fi
