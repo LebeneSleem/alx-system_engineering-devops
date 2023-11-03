@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Install Nginx (if not already installed)
 if ! dpkg -l | grep -q "nginx"; then
@@ -27,6 +27,6 @@ sudo ln -s /etc/nginx/sites-available/redirect_me.conf /etc/nginx/sites-enabled/
 sudo nginx -t
 
 # If the configuration test is successful, reload Nginx
-if [ $? -eq 0 ]; then
+if nginx -t; then
     sudo systemctl reload nginx
 fi
