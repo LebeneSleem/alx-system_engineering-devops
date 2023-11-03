@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 # This Bash script configures an Nginx server to return a "301 Moved Permanently"
 # status when accessing the /redirect_me location.
 
