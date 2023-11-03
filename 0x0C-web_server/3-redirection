@@ -1,35 +1,11 @@
 #!/usr/bin/env bash
-# This Bash script configures an Nginx server to return a "301 Moved Permanently"
-# status when accessing the /redirect_me location.
+# Script that configures a new Ubuntu machine to respect above requirements
 
-# Update and install Nginx
 sudo apt-get update
 sudo apt-get install -y nginx
 
-# Create a simple index.html for the default server block
 echo "Hello World!" | sudo tee /var/www/html/index.html
+string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.blog.ehoneahobed.com permanent;"
+sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-enabled/default
 
-# Define the Nginx configuration for redirection
-config_block="
-server {
-    listen 80;
-    server_name _;
-
-    location /redirect_me {
-        return 301 https://www.kharisrem.tech\$request_uri;
-    }
-
-    # Add any other server configuration as needed
-}
-"
-
-# Add the new server block to the default Nginx configuration
-echo "$config_block" | sudo tee /etc/nginx/sites-available/redirect_me
-
-# Create a symbolic link to enable the new configuration
-sudo ln -s /etc/nginx/sites-available/redirect_me /etc/nginx/sites-enabled/
-
-# Test the Nginx configuration for syntax errors
-if sudo nginx -t; then
-    sudo systemctl reload nginx
-fi
+sudo service nginx restart
