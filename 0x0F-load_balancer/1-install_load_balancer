@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Script to install and configure HAProxy on lb-01 server
 
 # Update the package list
