@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# This script ensures Nginx is running and listening on port 80 for all active IPv4 IPs.
+
+# Start Nginx if it's not running
+if ! pgrep -x "nginx" > /dev/null; then
+    sudo systemctl start nginx
+fi
+
+# Ensure Nginx is configured to listen on port 80 for all active IPv4 IPs
+sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.backup  # Backup the default configuration
+
+sudo tee /etc/nginx/sites-available/default > /dev/null <<EOL
+server {
+    listen 80;
+    server_name _;
+
+    location / {
+        # Your configuration options here
+        # For example, proxy_pass http://localhost:your_port;
+        # Add any other necessary configurations
+        try_files \$uri \$uri/ =404;
+    }
+}
+EOL
+
+# Test Nginx configuration
+sudo nginx -t
+
+# Reload Nginx to apply the changes
+sudo systemctl reload nginx
+
+# Display Nginx status
+sudo systemctl status nginx
