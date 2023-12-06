@@ -4,36 +4,30 @@ Python script to gather data from a REST API for a given employee ID.
 """
 
 import requests
-from sys import argv
+import sys
 
-if __name__ == "__main__":
-    if len(argv) != 2 or not argv[1].isdigit():
-        print("Usage: {} <employee_id>".format(argv[0]))
-    else:
-        employee_id = int(argv[1])
 
-        # Fetching user data
-        user_response = requests.get(
-            "https://jsonplaceholder.typicode.com/users/{}".format(employee_id)
-        )
-        user_data = user_response.json()
+if __name__ == '__main__':
+    employeeId = sys.argv[1]
+    baseUrl = "https://jsonplaceholder.typicode.com/users"
+    url = baseUrl + "/" + employeeId
 
-        # Fetching TODO list for the user
-        todo_response = requests.get(
-            "https://jsonplaceholder.typicode.com/todos?userId={}".format(employee_id)
-        )
-        todo_data = todo_response.json()
+    response = requests.get(url)
+    employeeName = response.json().get('name')
 
-        # Calculating completed and total tasks
-        total_tasks = len(todo_data)
-        completed_tasks = sum(task['completed'] for task in todo_data)
+    todoUrl = url + "/todos"
+    response = requests.get(todoUrl)
+    tasks = response.json()
+    done = 0
+    done_tasks = []
 
-        # Displaying the information
-        print("Employee {} is done with tasks({}/{}):".format(
-            user_data['name'], completed_tasks, total_tasks
-        ))
+    for task in tasks:
+        if task.get('completed'):
+            done_tasks.append(task)
+            done += 1
 
-        # Displaying the titles of completed tasks
-        for task in todo_data:
-            if task['completed']:
-                print("\t{}".format(task['title']))
+    print("Employee {} is done with tasks({}/{}):"
+          .format(employeeName, done, len(tasks)))
+
+    for task in done_tasks:
+        print("\t {}".format(task.get('title')))
