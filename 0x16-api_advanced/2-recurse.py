@@ -44,7 +44,8 @@ def recurse(subreddit, hot_list=None, after=None):
         # Check if there are posts in the response
         if 'data' in data and 'children' in data['data']:
             # Append titles to the hot_list
-            hot_list.extend([post['data']['title'] for post in data['data']['children']])
+            hot_list.extend([post['data']['title'] for post\
+                    in data['data']['children']])
 
             # Check if there are more pages (pagination)
             after = data['data']['after']
@@ -65,6 +66,7 @@ def recurse(subreddit, hot_list=None, after=None):
         # Handle other errors
         print(f"Error: {response.status_code}")
         return None
+
 
 if __name__ == "__main__":
     # Example usage:
