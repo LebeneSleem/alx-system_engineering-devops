@@ -18,36 +18,21 @@ def top_ten(subreddit):
     Returns:
         None
     """
-    # Reddit API endpoint for hot posts in the subreddit
-    url = f'https://www.reddit.com/r/{subreddit}/hot.json'
+    if subreddit is None or not isinstance(subreddit, str):
+        print("None")
 
-    # Set a custom User-Agent to avoid Too Many Requests error
-    headers = {'User-Agent': 'my_app/1.0'}
+    user_agent = {'User-agent': 'Google Chrome Version 81.0.4044.129'}
+    params = {'limit': 10}
+    url = 'https://www.reddit.com/r/{}/hot/.json'.format(subreddit)
 
-    # Make the GET request to the Reddit API
-    response = requests.get(url, headers=headers)
+    response = get(url, headers=user_agent, params=params)
+    results = response.json()
 
-    # Check if the request was successful (status code 200)
-    if response.status_code == 200:
-        # Parse the JSON response
-        data = response.json()
+    try:
+        my_data = results.get('data').get('children')
 
-        # Check if there are posts in the response
-        if 'data' in data and 'children' in data['data']:
-            # Print titles of the first 10 posts
-            for post in data['data']['children'][:10]:
-                print(post['data']['title'])
-        else:
-            print("No posts found for the subreddit.")
-    elif response.status_code == 404:
-        # Subreddit not found, print None
-        print(f"Subreddit '{subreddit}' not found.")
-    else:
-        # Handle other errors
-        print(f"Error: {response.status_code}")
+        for i in my_data:
+            print(i.get('data').get('title'))
 
-
-if __name__ == "__main__":
-    # Example usage:
-    subreddit_name = 'python'
-    top_ten(subreddit_name)
+    except Exception:
+        print("None")
